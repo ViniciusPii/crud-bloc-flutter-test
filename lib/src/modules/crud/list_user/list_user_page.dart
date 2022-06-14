@@ -1,5 +1,6 @@
 import 'package:counter_bloc/src/core/theme/app_dimension.dart';
 import 'package:counter_bloc/src/core/theme/app_fonts.dart';
+import 'package:counter_bloc/src/models/user_model.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_bloc.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_state.dart';
 import 'package:flutter/material.dart';
@@ -59,16 +60,26 @@ class _ListUserPageState extends State<ListUserPage> {
                       final user = dataValue?.users[index];
 
                       return ListTile(
-                        title: Text(user!.name),
+                        title: Text(user?.name ?? ''),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete_forever_outlined,
+                          ),
+                          onPressed: () => controller.removeUser(user!),
+                        ),
                       );
                     },
                     itemCount: dataValue?.users.length,
                   ),
                 );
               },
-            )
+            ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => controller.addUser(UserModel(name: 'Testando')),
+        child: const Icon(Icons.add),
       ),
     );
   }

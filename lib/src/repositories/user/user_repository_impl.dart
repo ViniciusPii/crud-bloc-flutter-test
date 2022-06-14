@@ -13,4 +13,16 @@ class UserRepositoryImpl implements UserRepository {
   List<UserModel> getUsers() {
     return _users;
   }
+
+  @override
+  List<UserModel> removeUser(UserModel user) {
+    _users.remove(user);
+    return _users;
+  }
+
+  @override
+  List<UserModel> addUser(UserModel user) {
+    _users.add(user);
+    return _users;
+  }
 }
