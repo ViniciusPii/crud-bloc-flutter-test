@@ -4,6 +4,7 @@ import 'package:counter_bloc/src/models/user_model.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_bloc.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 class ListUserPage extends StatefulWidget {
   const ListUserPage({Key? key}) : super(key: key);
@@ -13,12 +14,18 @@ class ListUserPage extends StatefulWidget {
 }
 
 class _ListUserPageState extends State<ListUserPage> {
-  final controller = ListUserBloc();
+  final controller = GetIt.I.get<ListUserBloc>();
 
   @override
   void initState() {
     controller.getUsers();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override

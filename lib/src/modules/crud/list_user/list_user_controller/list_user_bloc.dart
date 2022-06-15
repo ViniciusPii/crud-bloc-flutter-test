@@ -25,7 +25,7 @@ class ListUserBloc {
   void removeUser(UserModel user) async {
     try {
       _listUserStreamController.add(ListUserLoadingState());
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 500));
       // throw Exception();
       _listUserStreamController.add(ListUserState(users: _userService.removeUser(user)));
     } on Exception {
