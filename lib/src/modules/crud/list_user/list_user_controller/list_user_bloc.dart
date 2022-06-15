@@ -6,15 +6,15 @@ import 'package:counter_bloc/src/services/user/user_service.dart';
 import 'package:get_it/get_it.dart';
 
 class ListUserBloc {
+  final _userService = GetIt.I.get<UserService>();
+
   final _listUserStreamController = StreamController<ListUserState>();
   Stream<ListUserState> get listUserOut => _listUserStreamController.stream;
-
-  final _userService = GetIt.I.get<UserService>();
 
   void getUsers() async {
     try {
       _listUserStreamController.add(ListUserLoadingState());
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(milliseconds: 500));
       // throw Exception();
       _listUserStreamController.add(ListUserState(users: _userService.getUsers()));
     } on Exception {
@@ -36,7 +36,7 @@ class ListUserBloc {
   void addUser(UserModel user) async {
     try {
       _listUserStreamController.add(ListUserLoadingState());
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 500));
       // throw Exception();
       _listUserStreamController.add(ListUserState(users: _userService.addUser(user)));
     } on Exception {

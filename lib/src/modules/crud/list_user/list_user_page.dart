@@ -1,8 +1,8 @@
 import 'package:counter_bloc/src/core/theme/app_dimension.dart';
 import 'package:counter_bloc/src/core/theme/app_fonts.dart';
-import 'package:counter_bloc/src/models/user_model.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_bloc.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_state.dart';
+import 'package:counter_bloc/src/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -85,7 +85,9 @@ class _ListUserPageState extends State<ListUserPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => controller.addUser(UserModel(name: 'Testando')),
+        onPressed: () => Navigator.pushNamed(context, Routes.formPage).whenComplete(
+          () => controller.getUsers(),
+        ),
         child: const Icon(Icons.add),
       ),
     );
