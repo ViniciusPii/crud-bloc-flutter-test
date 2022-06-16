@@ -1,20 +1,26 @@
+import 'package:flutter/material.dart';
+
+import 'package:counter_bloc/src/core/theme/app_colors.dart';
 import 'package:counter_bloc/src/core/theme/app_dimension.dart';
 import 'package:counter_bloc/src/core/theme/app_fonts.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_bloc.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_state.dart';
 import 'package:counter_bloc/src/routes/routes.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class ListUserPage extends StatefulWidget {
-  const ListUserPage({Key? key}) : super(key: key);
+  const ListUserPage({
+    Key? key,
+    required this.listUserBloc,
+  }) : super(key: key);
+
+  final ListUserBloc listUserBloc;
 
   @override
   State<ListUserPage> createState() => _ListUserPageState();
 }
 
 class _ListUserPageState extends State<ListUserPage> {
-  final controller = GetIt.I.get<ListUserBloc>();
+  late final ListUserBloc controller = widget.listUserBloc;
 
   @override
   void initState() {
@@ -54,31 +60,18 @@ class _ListUserPageState extends State<ListUserPage> {
                 final dataValue = snapshot.data;
 
                 if (dataValue is ListUserLoadingState) {
-                  return const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  return _buildLoading();
                 }
 
-                return Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (_, index) {
-                      final user = dataValue?.users[index];
+                if (dataValue is ListUserErrorState) {
+                  return _buildError(dataValue);
+                }
 
-                      return ListTile(
-                        title: Text(user?.name ?? ''),
-                        trailing: IconButton(
-                          icon: const Icon(
-                            Icons.delete_forever_outlined,
-                          ),
-                          onPressed: () => controller.removeUser(user!),
-                        ),
-                      );
-                    },
-                    itemCount: dataValue?.users.length,
-                  ),
-                );
+                if (dataValue!.users.isEmpty) {
+                  return _buildEmpty();
+                }
+
+                return _buildListUser(dataValue);
               },
             ),
           ],
@@ -89,6 +82,57 @@ class _ListUserPageState extends State<ListUserPage> {
           () => controller.getUsers(),
         ),
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildListUser(ListUserState dataValue) {
+    return Expanded(
+      child: ListView.builder(
+        itemBuilder: (_, index) {
+          final user = dataValue.users[index];
+
+          return ListTile(
+            title: Text(user.name),
+            trailing: IconButton(
+              icon: const Icon(
+                Icons.delete_forever_outlined,
+              ),
+              onPressed: () => controller.removeUser(user),
+            ),
+          );
+        },
+        itemCount: dataValue.users.length,
+      ),
+    );
+  }
+
+  Widget _buildEmpty() {
+    return Expanded(
+      child: Center(
+        child: Text(
+          'Lista vazia',
+          style: AppFonts.titleLarge(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildError(ListUserErrorState dataValue) {
+    return Expanded(
+      child: Center(
+        child: Text(
+          dataValue.message,
+          style: AppFonts.titleLarge(color: AppColors.red),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Expanded(
+      child: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }

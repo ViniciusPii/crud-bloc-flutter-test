@@ -4,17 +4,18 @@ import 'package:counter_bloc/src/core/theme/app_fonts.dart';
 import 'package:counter_bloc/src/modules/counter/counter_controller/counter_bloc.dart';
 import 'package:counter_bloc/src/modules/counter/counter_controller/counter_state.dart';
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 class CounterPage extends StatefulWidget {
-  const CounterPage({Key? key}) : super(key: key);
+  const CounterPage({Key? key, required this.counterBloc}) : super(key: key);
+
+  final CounterBloc counterBloc;
 
   @override
   State<CounterPage> createState() => _CounterPageState();
 }
 
 class _CounterPageState extends State<CounterPage> {
-  final controller = GetIt.I.get<CounterBloc>();
+  late final CounterBloc controller = widget.counterBloc;
 
   @override
   void dispose() {

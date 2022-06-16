@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:counter_bloc/src/models/user_model.dart';
 import 'package:counter_bloc/src/modules/crud/form_user/form_user_controller/form_user_state.dart';
-import 'package:counter_bloc/src/repositories/user/user_repository.dart';
-import 'package:get_it/get_it.dart';
+import 'package:counter_bloc/src/services/user/user_service.dart';
 
 class FormUserBloc {
-  final _userService = GetIt.I.get<UserRepository>();
+  FormUserBloc({
+    required UserService userService,
+  }) : _userService = userService;
+
+  final UserService _userService;
 
   final _formUserStreamController = StreamController<FormUserState>();
   Stream<FormUserState> get formUserOut => _formUserStreamController.stream;
@@ -15,5 +18,9 @@ class FormUserBloc {
     _formUserStreamController.add(FormUserLoadingState());
     await Future.delayed(const Duration(milliseconds: 500));
     _userService.addUser(user);
+  }
+
+  void dispose() {
+    _formUserStreamController.close();
   }
 }

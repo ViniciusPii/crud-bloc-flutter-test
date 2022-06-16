@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:counter_bloc/src/models/user_model.dart';
 import 'package:counter_bloc/src/modules/crud/list_user/list_user_controller/list_user_state.dart';
 import 'package:counter_bloc/src/services/user/user_service.dart';
-import 'package:get_it/get_it.dart';
 
 class ListUserBloc {
-  final _userService = GetIt.I.get<UserService>();
+  ListUserBloc({
+    required UserService userService,
+  }) : _userService = userService;
+
+  final UserService _userService;
 
   final _listUserStreamController = StreamController<ListUserState>();
   Stream<ListUserState> get listUserOut => _listUserStreamController.stream;

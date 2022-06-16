@@ -14,10 +14,10 @@ injection() {
   getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
 
   //services
-  getIt.registerLazySingleton<UserService>(() => UserServiceImpl());
+  getIt.registerLazySingleton<UserService>(() => UserServiceImpl(userRepository: getIt()));
 
   //controllers
   getIt.registerFactory<CounterBloc>(() => CounterBloc());
-  getIt.registerFactory<ListUserBloc>(() => ListUserBloc());
-  getIt.registerFactory<FormUserBloc>(() => FormUserBloc());
+  getIt.registerFactory<ListUserBloc>(() => ListUserBloc(userService: getIt()));
+  getIt.registerFactory<FormUserBloc>(() => FormUserBloc(userService: getIt()));
 }
